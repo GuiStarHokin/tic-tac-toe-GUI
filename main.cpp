@@ -1,9 +1,9 @@
 #include "game.h"
 
+
 void RunGame()
 {
     InitGame();
-    srand((unsigned int)time(NULL));
     while (1)
     {
         // 用户先下棋
@@ -13,10 +13,12 @@ void RunGame()
         {
             // 人下棋
             PlayerMove(&msg);
+            // 判断有没有赢家
+            IsWin();
+            Sleep(1000);
+            ComputerMove();
         }
-        // 判断有没有赢家
 
-        ComputerMove();
     }
 }
 
