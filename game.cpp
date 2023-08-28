@@ -70,11 +70,48 @@ void ComputerMove()
 	}
 }
 
-void IsWin()
+extern void PlayerWin()
+{
+	BeginBatchDraw();
+	IMAGE player_win;
+	loadimage(&player_win, L"image/win.jpg");
+	putimage(0, 0, &player_win);
+	EndBatchDraw();
+}
+
+extern void ComputerWin()
+{
+	BeginBatchDraw();
+	IMAGE computer_win;
+	loadimage(&computer_win, L"image/fail.jpg");
+	putimage(0, 0, &computer_win);
+	EndBatchDraw();
+}
+
+/*满了返回1，不满返回0*/
+extern int IsFull()
+{
+	int lines = 0;
+	int col = 0;
+	for (lines = 0, col = 0; lines < 3; lines++, col++)
+	{
+		if (board[lines][col] == 0)
+		{
+			return 0;
+		}
+	}
+	if (lines == 3)
+	{
+		return 1;
+	}
+}
+
+/*玩家赢返回1，电脑赢返回-1，平局返回2*/
+int IsWin()
 {
 	int line = 0;
 	int col = 0;
-	
+
 	// 行相同
 	for (line = 0; line < 3; line++)
 	{
@@ -82,20 +119,74 @@ void IsWin()
 		{
 			if (board[line][1] == 1)
 			{
-				BeginBatchDraw();
-				IMAGE player_win;
-				loadimage(&player_win, L"win.jpg");
-				putimage(0, 0, &player_win);
-				EndBatchDraw();
+				PlayerWin();
+				return 1;
 			}
-			else if (board[line][1] == 0)
+			else if (board[line][1] == -1)
 			{
-				BeginBatchDraw();
-				IMAGE computer_win;
-				loadimage(&computer_win, L"fail.jpg");
-				putimage(0, 0, &computer_win);
-				EndBatchDraw();
+				ComputerWin();
+				return -1;
 			}
 		}
+	} // end-for
+
+	// 列相同
+	line = 0;
+	for (col = 0; col < 3; col++)
+	{
+		if (board[0][col] == board[1][col] && board[1][col] == board[2][col] && board[1][col] != 0)
+		{
+			if (board[1][col] == 1)
+			{
+				PlayerWin();
+				return 1;
+			}
+			else if (board[1][col] == -1)
+			{
+				ComputerWin();
+				return -1;
+			}
+		}
+	} // end-for
+
+	// 正对角线
+	if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[1][1] != 0)
+	{
+		if (board[1][1] == 1)
+		{
+			PlayerWin();
+			return 1;
+		}
+		else if (board[1][1] == -1)
+		{
+			ComputerWin();
+			return -1;
+		}
+	}
+
+	// 斜对角线
+	if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[1][1] != 0)
+	{
+		if (board[1][1] == 1)
+		{
+			PlayerWin();
+			return 1;
+		}
+		else if (board[1][1] == -1)
+		{
+			ComputerWin();
+			return -1;
+		}
+	}
+
+	// 平局
+	int ret = IsFull();
+	if (ret)
+	{
+		return 2;
+	}
+	else
+	{
+		return 3;
 	}
 }

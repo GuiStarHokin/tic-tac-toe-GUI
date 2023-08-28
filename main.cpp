@@ -14,9 +14,16 @@ void RunGame()
             // 人下棋
             PlayerMove(&msg);
             // 判断有没有赢家
-            IsWin();
+            int ret = IsWin();
             Sleep(1000);
-            ComputerMove();
+            if (ret == 3)
+            {
+                ComputerMove();
+            }
+            else
+            {
+                break;
+            }
         }
 
     }

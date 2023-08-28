@@ -14,4 +14,4 @@
 extern void InitGame();
 extern void PlayerMove(MOUSEMSG* msg);
 extern void ComputerMove();
-extern void IsWin();
+extern int IsWin();
