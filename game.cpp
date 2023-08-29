@@ -31,22 +31,22 @@ void InitGame()
 void PlayerMove(MOUSEMSG* msg)
 {
 	// 窗口大小为600x600，每个格子大小为200x200
-	int line = msg->y / 200;
+	int lines = msg->y / 200;
 	int col = msg->x / 200;
-	if (board[line][col] == 0)
+	if (board[lines][col] == 0)
 	{
 		BeginBatchDraw();
 		/*用户白棋*/ 
-		putimage(col * 200 + 10, line * 200 + 10, &img1, SRCPAINT);
-		putimage(col * 200 + 10, line * 200 + 10, &img3, SRCAND);
+		putimage(col * 200 + 10, lines * 200 + 10, &img1, SRCPAINT);
+		putimage(col * 200 + 10, lines * 200 + 10, &img3, SRCAND);
 		EndBatchDraw();
-		board[line][col] = 1;
+		board[lines][col] = 1;
 	}
 }
 void ComputerMove()
 {
 	/*简单版的电脑*/
-	int line = 0;
+	int lines = 0;
 	int col = 0;
 	srand((unsigned int)time(NULL)); 
 	/*随机数种子不应该放while循环里面去，
@@ -55,16 +55,16 @@ void ComputerMove()
 	从而导致生成的随机数序列相同，使得循环无法终止*/
 	while (1)
 	{
-		line = rand() % 3;
+		lines = rand() % 3;
 		col = rand() % 3;
-		if (board[line][col] == 0)
+		if (board[lines][col] == 0)
 		{
 			BeginBatchDraw();
 			/*电脑黑棋*/
-			putimage(col * 200 + 10, line * 200 + 10, &img1, SRCPAINT);
-			putimage(col * 200 + 10, line * 200 + 10, &img2, SRCAND);
+			putimage(col * 200 + 10, lines * 200 + 10, &img1, SRCPAINT);
+			putimage(col * 200 + 10, lines * 200 + 10, &img2, SRCAND);
 			EndBatchDraw();
-			board[line][col] = -1;
+			board[lines][col] = -1;
 			break;
 		}
 	}
@@ -109,20 +109,20 @@ extern int IsFull()
 /*玩家赢返回1，电脑赢返回-1，平局返回2*/
 int IsWin()
 {
-	int line = 0;
+	int lines = 0;
 	int col = 0;
 
 	// 行相同
-	for (line = 0; line < 3; line++)
+	for (lines = 0; lines < 3; lines++)
 	{
-		if (board[line][0] == board[line][1] && board[line][1] == board[line][2] && board[line][1] != 0)
+		if (board[lines][0] == board[lines][1] && board[lines][1] == board[lines][2] && board[lines][1] != 0)
 		{
-			if (board[line][1] == 1)
+			if (board[lines][1] == 1)
 			{
 				PlayerWin();
 				return 1;
 			}
-			else if (board[line][1] == -1)
+			else if (board[lines][1] == -1)
 			{
 				ComputerWin();
 				return -1;
@@ -131,7 +131,7 @@ int IsWin()
 	} // end-for
 
 	// 列相同
-	line = 0;
+	lines = 0;
 	for (col = 0; col < 3; col++)
 	{
 		if (board[0][col] == board[1][col] && board[1][col] == board[2][col] && board[1][col] != 0)
