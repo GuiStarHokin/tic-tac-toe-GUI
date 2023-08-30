@@ -15,10 +15,12 @@ void RunGame()
             PlayerMove(&msg);
             // 判断有没有赢家
             int ret = IsWin();
-            Sleep(1000);
+            
             if (ret == 3)
             {
-                ComputerMove();
+                ComputerMove(); 
+                ret = IsWin();
+
             }
             else
             {

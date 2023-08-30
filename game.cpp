@@ -40,19 +40,22 @@ void PlayerMove(MOUSEMSG* msg)
 		putimage(col * 200 + 10, lines * 200 + 10, &img1, SRCPAINT);
 		putimage(col * 200 + 10, lines * 200 + 10, &img3, SRCAND);
 		EndBatchDraw();
-		board[lines][col] = 1;
+		board[lines][col] = Player;
 	}
 }
 void ComputerMove()
 {
 	/*简单版的电脑*/
-	int lines = 0;
-	int col = 0;
-	srand((unsigned int)time(NULL)); 
+
 	/*随机数种子不应该放while循环里面去，
 	由于time(NULL)返回的是当前时间的秒数，
 	因此在很短的时间内多次调用srand()函数会得到相同的种子值，
 	从而导致生成的随机数序列相同，使得循环无法终止*/
+
+	/*屏蔽
+	int lines = 0;
+	int col = 0;
+	srand((unsigned int)time(NULL)); 
 	while (1)
 	{
 		lines = rand() % 3;
@@ -60,14 +63,26 @@ void ComputerMove()
 		if (board[lines][col] == 0)
 		{
 			BeginBatchDraw();
-			/*电脑黑棋*/
+			// 电脑黑棋
+			Sleep(2000);
 			putimage(col * 200 + 10, lines * 200 + 10, &img1, SRCPAINT);
 			putimage(col * 200 + 10, lines * 200 + 10, &img2, SRCAND);
 			EndBatchDraw();
-			board[lines][col] = -1;
+			board[lines][col] = Computer;
 			break;
 		}
 	}
+	*/
+
+	// 方法二
+	// 把人的思考方式，用代码表达出来，并自动按照整个方式思考
+	// 三子棋有以下规律：
+	// 1.如果第一步棋，走在中间，那么第二步（电脑），一定要走在角上，否则将会输掉
+	// 2.其他情况：
+	//		如果自己能够马上赢，就马上赢
+	//		如果对方马上就要赢了，就阻止他
+	//		否则：随机
+
 }
 
 extern void PlayerWin()
@@ -109,6 +124,8 @@ extern int IsFull()
 /*玩家赢返回1，电脑赢返回-1，平局返回2*/
 int IsWin()
 {
+	/*
+	方法一
 	int lines = 0;
 	int col = 0;
 
@@ -188,5 +205,27 @@ int IsWin()
 	else
 	{
 		return 3;
+	}
+
+	*/
+
+	// 方法二
+	int sum = 0;
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			sum += board[key[i][j][0]][key[i][j][1]];
+		}
+		if (sum == 3)
+		{
+			// 人赢了
+			PlayerWin();
+		}
+		else if (sum == -3)
+		{
+			// 电脑赢了
+			ComputerWin();
+		}
 	}
 }
