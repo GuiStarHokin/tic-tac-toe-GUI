@@ -43,6 +43,7 @@ void PlayerMove(MOUSEMSG* msg)
 		board[lines][col] = Player;
 	}
 }
+
 void ComputerMove()
 {
 	/*¼òµ¥°æµÄµçÄÔ*/
